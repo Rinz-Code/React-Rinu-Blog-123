@@ -2,6 +2,10 @@
 
 ---
 
+## This tutor is based of net ninja react series,There would some error made by me sorry for that
+
+
+,
 ```bash
 npx create-react-app
 
@@ -418,11 +422,7 @@ useEffect(() => {
 ### look this line of code
 
 ```jsx
-{
-  blogs && (
-    <BlogList blogs={blogs} title="All Blogs" handleDelete={handleDelete} />
-  );
-}
+{blogs && <BlogList blogs={blogs} title="All Blogs"/>}
 ```
 
 what does this do the 'blogs' thing is not null
@@ -728,7 +728,7 @@ replace 'a' tag with 'Link' component
                     backgroundColor:"#f1356d",
                     borderRadius:"8px"
                 }}>New Blog</a> // to
-                <Link  to="/">Home</Link>// Link COmponent
+                <Link  to="/">Home</Link>// Link Component
                 <Link to="/create" style={{
                     color:"white",
                     backgroundColor:"#f1356d",
@@ -738,4 +738,122 @@ replace 'a' tag with 'Link' component
 
 ## useEffect Cleanup
 
-when we run the app we seen a error in console it is a problem with useEffect in useFetch cstom hook
+when we run the app we seen a error in console it is a problem with useEffect in useFetch custom hook
+
+#### when we got to home page and the our custom Hook will start to fetch the data from json server, 
+#### If we switch page from Home to Create when fetching is working.It will show a error like not found component Home becuase we have change it to Create component.
+#### so we get this error how to stop this error.
+### to remove this error we want to stop the fetch .when we changed the component.
+### we want to use something called "AbortController"
+#### add it as a Cleanup function 
+```js
+/*clean up function run when a the page change 
+we can make a clean up function just by returning it from the useEffect*/
+useEffect(()=>{
+      ///Codes here removed
+        return () => console.log('CleanUp Function Run.fast we want to win worldcup');
+      },[url]);
+```
+Then we want to create a AbortController object
+
+```js
+const abortCont = new AbortController();
+```
+we created it then we associate this with a fetch request
+and use this to stop fetch
+
+it is simple we only need to add abortcont as signal{optional argument of fetch} for fetch
+```js
+fetch(url,{signal:abortCont.signal})
+```
+now we can use this to stop fetchs
+
+for that we want to replace this as clean up function
+
+```js
+return () => abortCont.abort()
+```
+now we are have another problem with .catch we are updating home component by changing the error and other variables with setError and .. 
+
+.so we want to fix this also fix it is very simple we want to recognise that error.with if statement
+like this
+```js
+// in useFetch Custom Hook
+        .catch(err =>{
+          if (err.name === "AbortError"){
+            console.log('Fetch Abort')
+          }else{
+            setIsPending(false);
+            setError(err.message);
+          }
+        })
+```
+
+## Route Parameters
+
+on a blog detail page
+url will be like 
+blog/123
+blog is a represent it is a blog
+123 is id of the blog
+the id will unique value
+and pass it as dynamic value for this we use route parameter
+
+and first we want to create a detailPage componenet
+create it
+
+```js
+            <Route path="/blogs/:id">
+              <BlogDetails />
+            </Route>
+```
+this how we create dynamic routing with routeparameter
+
+now we created a dynamic route we want to get the value from url to acces it from blogDetails component.
+
+So that we uses a Hook from react-router-dom which 'useParams'
+
+import it
+```js
+import { useParams } from 'react-router-dom';
+```
+
+and assign variable which give as acces to id in useParams
+
+```js
+const { id } = useParams();
+```
+
+Link BlogList component with blog using Link component
+
+```jsx
+import { Link } from 'react-router-dom'
+const BlogList = ({blogs,title}) => {
+    return ( 
+        <div className="blog-list">
+            <h1>{ title }</h1>
+            {blogs.map(blog=>(
+                <div className="blog-preview" key={blog.id}>
+                  <Link to={`/blogs/${blog.id}`}> {/*template string*/}
+                    <h2>{ blog.title }</h2>
+                    <p>written by { blog.author }</p>
+                  </Link>
+                </div>
+            ))}
+        </div>
+     );
+}
+ 
+export default BlogList;
+```
+we dynamically callingg the values
+
+this how this works well 
+lit bit css here
+
+to remove the underlines
+```css
+.blog-preview a {
+  text-decoration: none;
+}
+```
