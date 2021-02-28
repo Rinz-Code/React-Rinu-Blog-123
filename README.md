@@ -875,5 +875,93 @@ data,isPending,error
 on BlogDetails.js
 
 ```js
-    const { data:blog,isPending,error } = useFetch('http://localhost:3000/'+id); //id value is predefined in BlogDetails.js
+    const { data:blog,isPending,error } = useFetch('http://localhost:8000/blogs/'+id); //id value is predefined in BlogDetails.js
 ```
+
+so we done these we want to add some more css to index.css
+
+```css
+/* blog details page */
+.blog-details h2 {
+  font-size: 20px;
+  color: #f1356d;
+  margin-bottom: 10px;
+}
+.blog-details div {
+  margin: 20px 0;
+}
+.blog-details button {
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+```
+
+## Controlled input {forms in react}
+
+Inorder to make form in our Create component we need our <form></form> tag
+and labels and inputs 
+
+let's do it 
+```jsx
+  <form>
+    <label>Blog title:</label>
+    <input
+      type="text"
+      required
+    />
+    <label>Blog title:</label>
+    <textarea
+      required
+    ></textarea>
+    <label>Blog Author:</label>
+    <select>
+      <option value="Rinshin">Rinshin</option>
+      <option value="Rinu">Rinu</option>
+    </select>
+    <button>Add Blog</button>
+  </form>
+```
+
+add some more css to style these terrible html elements
+
+```css
+/* create new blog form */
+.create {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+.create label {
+  text-align: left;
+  display: block;
+}
+.create h2 {
+  font-size: 20px;
+  color: #f1356d;
+  margin-bottom: 30px;
+}
+.create input, .create textarea, .create select {
+  width: 100%;
+  padding: 6px 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  display: block;
+}
+.create button {
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+```
+### To get inputed value
+
+we create states associated with each inputs
+
