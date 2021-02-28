@@ -3,10 +3,18 @@ import useFetch from './useFetch';
 
 const BlogDetails = () => {
     const { id } = useParams();
-    const { data,isPending,error } = useFetch()
+    const { data:blog,isPending,error } = useFetch('http://localhost:3000/'+id); //id value is predefined in BlogDetails.js
     return ( 
         <div className="blog-details">
-            <h2>Blog Detail Page - { id }</h2>
+            { isPending && <div>Loading.....</div>}
+            { error && <div>{ error }</div> }
+            { blog && (
+                <article>
+                    <h2>{blog.title}</h2>
+                    <p>Written by {blog.author}</p>
+                    <div>{ blog.body }</div>
+                </article>
+            )}
         </div>
      );
 }

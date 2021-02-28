@@ -857,3 +857,23 @@ to remove the underlines
   text-decoration: none;
 }
 ```
+
+## Reusing custom Hook
+
+we have created a react hook named useFetch which helps as to fetch data from a url
+
+we enhanced it by cleanuping it and fixing errors of it .
+
+So now we also have the BlogDetails component which will show each blogs from it's on webpage.
+
+So now we BlogDetails page is access to id and other things we want to access useFetch component again.
+
+Remember our useFetch hook returns as three values
+
+data,isPending,error 
+
+on BlogDetails.js
+
+```js
+    const { data:blog,isPending,error } = useFetch('http://localhost:3000/'+id); //id value is predefined in BlogDetails.js
+```
