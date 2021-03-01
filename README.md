@@ -659,7 +659,7 @@ jsx with Router,Swith,Route
 ```
 
 ## Exact match route
-
+---
 in this route
 
 if we go to / and /create it will only now show home
@@ -705,7 +705,7 @@ we want to add a 'exact' keyword to Route of /
 this is will work nicely
 
 ## Router Links
-
+---
 WE want to use link component
 to get SPA's functionalities
 
@@ -737,7 +737,7 @@ replace 'a' tag with 'Link' component
 ```
 
 ## useEffect Cleanup
-
+---
 when we run the app we seen a error in console it is a problem with useEffect in useFetch custom hook
 
 #### when we got to home page and the our custom Hook will start to fetch the data from json server, 
@@ -790,7 +790,7 @@ like this
 ```
 
 ## Route Parameters
-
+---
 on a blog detail page
 url will be like 
 blog/123
@@ -859,7 +859,7 @@ to remove the underlines
 ```
 
 ## Reusing custom Hook
-
+---
 we have created a react hook named useFetch which helps as to fetch data from a url
 
 we enhanced it by cleanuping it and fixing errors of it .
@@ -901,7 +901,7 @@ so we done these we want to add some more css to index.css
 ```
 
 ## Controlled input {forms in react}
-
+---
 Inorder to make form in our Create component we need our <form></form> tag
 and labels and inputs 
 
@@ -994,4 +994,125 @@ use these in the inputs in form tag
           </select>
           <button>Add Blog</button>
         </form>
+```
+
+## Submitting Events {form submitting}
+---
+
+to submitt a form we want to have form onSubmitt Function for our form
+
+first create function
+```js
+const handleSubmit = (e) => {
+  e.preventDefault(); // this preventDefault action which refresh the page we don't need it to happen
+}
+``` 
+
+call it from form
+```jsx
+<form onSubmit={handleSubmit}>
+</form>
+```
+make handleSubmit to create a blog object
+```js
+const handleSubmit = (e) => {
+  e.preventDefault(); // this preventDefault action which refresh the page we don't need it to happen
+  const blog = {title,body,author};
+  console.log(blog);
+}
+```
+## Making Post request 
+---
+
+Now we created blog object we want to pass it to the json file so that we need to use fetch with post
+inside handleSubmit
+we can do it by 
+```js
+const handleSubmit = (e) => {
+  e.preventDefault(); // this preventDefault action which refresh the page we don't need it to happen
+  const blog = {title,body,author};
+  fetch('http://localhost:8000/blogs/',{
+    method:'POST',
+    headers: { "Content-Type":"application/json" },
+    body: JSON.stringify(blog)
+  }).then(()=>{
+    console.log('New blog created')
+  })
+}
+```
+
+now we created these we also make something which shows the loading message
+how we create it
+```jsx
+const Create = () => {
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [author, setAuthor] = useState('mario');
+  const [isPending,setPending] = useState(false);//create it
+  const handleSubmit = (e) => {
+   e.preventDefault(); // this preventDefault action which refresh the page we don't need it to happen
+   
+   const blog = {title,body,author};
+
+   setPending(true);//assign new value when fetching data
+
+   fetch('http://localhost:8000/blogs/',{
+     method:'POST',
+     headers: { "Content-Type":"application/json" },
+     body: JSON.stringify(blog)
+    }).then(()=>{
+     console.log('New blog created')
+     setPending(false)//assign new value when finish fetching data
+    })
+  }
+
+  return (
+    <div className="create">
+      <h2>Add a New Blog</h2>
+      <form onSubmit={handleSubmit}>
+        <label>Blog title:</label>
+        <input 
+          type="text" 
+          required 
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <label>Blog body:</label>
+        <textarea
+          required
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+        ></textarea>
+        <label>Blog author:</label>
+        <select
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
+        >
+          <option value="mario">mario</option>
+          <option value="yoshi">yoshi</option>
+        </select>
+        {!isPending && <button>Add Blog</button>//if ispending is not true show this}
+        {isPending && <button disabled>Adding Blog...</button>//if it is true show this conditional templating react}
+      </form>
+    </div>
+  );
+}
+```
+
+## Programmatic Redirects
+---
+
+now we submitted the request we want to then redirect user to some page
+
+so  that we want to use hook called useHistory by react router dom
+
+import it
+```js
+import { useHistory } from 'react-router-dom';
+```
+use it 
+```js
+const history = useHistory;
+history.go(-1)//this will used for goto 1 previous page 
+history.push('/')//this will used for go back to homepage
 ```
