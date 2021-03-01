@@ -1116,3 +1116,92 @@ const history = useHistory;
 history.go(-1)//this will used for goto 1 previous page 
 history.push('/')//this will used for go back to homepage
 ```
+
+## Deleting Blogs
+---
+Now we have all these we want the deleting functionality too.
+for that we want to create function which help to delete it
+and add a button which call that function
+
+```js
+const handleClick = () => {
+  fetch('http://localhost:8000/blogs/'+id,{
+    method:'DELETE'
+  }).then(()=>{
+    history.push('/');
+  })
+} 
+```
+
+add some more styles
+```css
+
+/* blog details page */
+.blog-details h2 {
+  font-size: 20px;
+  color: #f1356d;
+  margin-bottom: 10px;
+}
+.blog-details div {
+  margin: 20px 0;
+}
+.blog-details button {
+  background: #f1356d;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+```
+
+## 404 pages & Next Steps
+---
+
+### 404 not found component
+
+create a file NotFound.js
+create a stateless functional component with same NotFound
+
+```jsx
+import { Link } from "react-router-dom"
+
+const NotFound = () => {
+  return (
+    <div className="not-found">
+      <h2>Sorry</h2>
+      <p>That page cannot be found</p>
+      <Link to="/">Back to the homepage...</Link>
+    </div>
+  );
+}
+//NotFound
+export default NotFound;
+```
+### how to catch 404 pages
+
+```jsx
+  return (
+    <Router>
+      <div className="App">
+        <Navbar />
+        <div className="content">
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/create">
+              <Create />
+            </Route>
+            <Route path="/blogs/:id">
+              <BlogDetails />
+            </Route>
+            <Route path="*">{/* this will catch any other routes which is not in top of this route */}
+              <NotFound />
+            </Route>
+          </Switch>
+        </div>
+      </div>
+    </Router>
+  );
+```
